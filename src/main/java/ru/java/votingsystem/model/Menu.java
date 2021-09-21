@@ -1,7 +1,10 @@
 package ru.java.votingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -26,7 +29,10 @@ public class Menu extends BaseEntity {
     @Min(0)
     private Integer price;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "menus")
-    @JsonManagedReference
-    private List<Restaurant> restaurants;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
+    @NotNull
+    private Restaurant restaurant;
 }
