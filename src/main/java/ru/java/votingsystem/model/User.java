@@ -21,12 +21,6 @@ import java.util.Set;
 @ToString(callSuper = true, exclude = {"password"})
 public class User  extends NamedEntity {
 
-    public static final String DELETE = "User.delete";
-    public static final String BY_EMAIL = "User.getByEmail";
-    public static final String ALL_SORTED = "User.getAllSorted";
-
-    public static final int START_SEQ = 100000;
-
     @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
