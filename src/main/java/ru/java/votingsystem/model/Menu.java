@@ -1,14 +1,12 @@
 package ru.java.votingsystem.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.List;
 
 @Entity
 @Table(name = "menus")
@@ -19,7 +17,6 @@ import java.util.List;
 public class Menu extends BaseEntity {
 
     @Column(name = "dish_name", nullable = false, unique = true)
-    @Email
     @NotBlank
     @Size(max = 100)
     private String dishName;
