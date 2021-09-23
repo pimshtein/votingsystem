@@ -22,7 +22,7 @@ public class VoteForRestaurant {
     public Vote execute(Vote vote, int userId) {
         LocalDateTime now = LocalDateTime.now();
 
-        Vote voteByUserPerDay = repository.getByUserAndCreated(userId, vote.getRestaurant().id());
+        Vote voteByUserPerDay = repository.getByUserAndCreated(userId);
         if (voteByUserPerDay.getId() == null) {
             return repository.save(vote);
         }
@@ -32,7 +32,9 @@ public class VoteForRestaurant {
             throw new CantVotingBecauseTimeIsOverException();
         }
 
+        repository.delete(voteByUserPerDay.getId());
         voteByUserPerDay.setRestaurant(vote.getRestaurant());
-        return repository.save(voteByUserPerDay);
+        Vote newVote = repository.save(voteByUserPerDay);
+        return newVote;
     }
 }
