@@ -2,6 +2,8 @@ package ru.java.votingsystem.web.restaurant;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.java.votingsystem.model.Menu;
 import ru.java.votingsystem.model.Restaurant;
-import ru.java.votingsystem.repository.MenuRepository;
 import ru.java.votingsystem.repository.RestaurantRepository;
 
 import javax.validation.Valid;
@@ -47,11 +48,11 @@ final public class RestaurantController {
         restaurantRepository.deleteExisted(id);
     }
 
-    @GetMapping
+    @GetMapping(params = { "page", "size" })
     @Operation(description = "Get all restaurants")
-    public List<Restaurant> getAll() {
+    public Page<Restaurant> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
         log.info("getAll");
-         return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+         return restaurantRepository.findAll(PageRequest.of(page, size, Sort.by("name")));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

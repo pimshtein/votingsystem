@@ -1,9 +1,9 @@
 package ru.java.votingsystem.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public interface CountVoteByRestaurantPerDay {
     int getRestaurantId();
     int getCount();
-    Date getVoteDate();
+    LocalDate getVoteDate();
 }

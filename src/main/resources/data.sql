@@ -3,9 +3,9 @@ VALUES ('User', 'user@mail.com', '{noop}password'),
        ('Admin', 'admin@mail.com', '{noop}admin');
 
 INSERT INTO user_roles (role, user_id)
-VALUES ('USER', (SELECT id FROM users WHERE email = 'user@mail.com')),
-       ('ADMIN', (SELECT id FROM users WHERE email = 'admin@mail.com')),
-       ('USER', (SELECT id FROM users WHERE email = 'admin@mail.com'));
+VALUES ('USER', 1),
+       ('ADMIN', 2),
+       ('USER', 2);
 
 INSERT INTO restaurants (name)
 VALUES ('U Svety'),
@@ -13,16 +13,16 @@ VALUES ('U Svety'),
        ('U Iriny');
 
 INSERT INTO menus (dish_name, price, restaurant_id)
-VALUES ('breakfast', 10, (SELECT id FROM restaurants WHERE name = 'U Svety')),
-       ('launch', 20, (SELECT id FROM restaurants WHERE name = 'U Svety')),
-       ('dinner', 30, (SELECT id FROM restaurants WHERE name = 'U Svety')),
-       ('one breakfast', 10, (SELECT id FROM restaurants WHERE name = 'U Natashi')),
-       ('one launch', 20, (SELECT id FROM restaurants WHERE name = 'U Natashi')),
-       ('one dinner', 30, (SELECT id FROM restaurants WHERE name = 'U Natashi')),
-       ('two breakfast', 10, (SELECT id FROM restaurants WHERE name = 'U Iriny')),
-       ('two launch', 20, (SELECT id FROM restaurants WHERE name = 'U Iriny'));
+VALUES ('breakfast', 10, 1),
+       ('launch', 20, 1),
+       ('dinner', 30, 1),
+       ('one breakfast', 10, 2),
+       ('one launch', 20, 2),
+       ('one dinner', 30, 2),
+       ('two breakfast', 10, 3),
+       ('two launch', 20, 3);
 
 INSERT INTO votes(restaurant_id, created, user_id)
-VALUES ((SELECT id FROM restaurants WHERE name = 'U Svety'), 'now()', (SELECT id FROM users WHERE email = 'user@mail.com')),
-       ((SELECT id FROM restaurants WHERE name = 'U Svety'), 'now()', (SELECT id FROM users WHERE email = 'admin@mail.com')),
-       ((SELECT id FROM restaurants WHERE name = 'U Natashi'), 'now()', (SELECT id FROM users WHERE email = 'user@mail.com'));
+VALUES (1, 'now()', 1),
+       (1, 'now()', 2),
+       (2, 'now()', 1);
