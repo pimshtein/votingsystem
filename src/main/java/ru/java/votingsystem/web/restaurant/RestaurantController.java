@@ -37,7 +37,7 @@ final public class RestaurantController {
     @GetMapping("{id}/")
     public ResponseEntity<Restaurant> get(int id) {
         log.info("get {}", id);
-        return ResponseEntity.of(restaurantRepository.findById(id));
+        return ResponseEntity.of(restaurantRepository.getWithMenus(id));
     }
 
     @DeleteMapping("{id}/")

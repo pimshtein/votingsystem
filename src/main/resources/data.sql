@@ -1,28 +1,28 @@
-INSERT INTO users (id, name, email, password)
-VALUES (1, 'User', 'user@yandex.ru', '{noop}password'),
-       (2, 'Admin', 'admin@gmail.com', '{noop}admin');
+INSERT INTO users (name, email, password)
+VALUES ('User', 'user@mail.com', '{noop}password'),
+       ('Admin', 'admin@mail.com', '{noop}admin');
 
 INSERT INTO user_roles (role, user_id)
-VALUES ('USER', 1),
-       ('ADMIN', 2),
-       ('USER', 2);
+VALUES ('USER', (SELECT id FROM users WHERE email = 'user@mail.com')),
+       ('ADMIN', (SELECT id FROM users WHERE email = 'admin@mail.com')),
+       ('USER', (SELECT id FROM users WHERE email = 'admin@mail.com'));
 
-INSERT INTO restaurants (id, name)
-VALUES (1, 'U Svety'),
-       (2, 'U Natashi'),
-       (3, 'U Iriny');
+INSERT INTO restaurants (name)
+VALUES ('U Svety'),
+       ('U Natashi'),
+       ('U Iriny');
 
-INSERT INTO menus (id, dish_name, price, restaurant_id)
-VALUES (1, 'breakfast', 10, 1),
-       (2, 'launch', 20, 1),
-       (3, 'dinner', 30, 1),
-       (4, 'one breakfast', 10, 2),
-       (5, 'one launch', 20, 2),
-       (6, 'one dinner', 30, 2),
-       (7, 'two breakfast', 10, 3),
-       (8, 'two launch', 20, 3);
+INSERT INTO menus (dish_name, price, restaurant_id)
+VALUES ('breakfast', 10, (SELECT id FROM restaurants WHERE name = 'U Svety')),
+       ('launch', 20, (SELECT id FROM restaurants WHERE name = 'U Svety')),
+       ('dinner', 30, (SELECT id FROM restaurants WHERE name = 'U Svety')),
+       ('one breakfast', 10, (SELECT id FROM restaurants WHERE name = 'U Natashi')),
+       ('one launch', 20, (SELECT id FROM restaurants WHERE name = 'U Natashi')),
+       ('one dinner', 30, (SELECT id FROM restaurants WHERE name = 'U Natashi')),
+       ('two breakfast', 10, (SELECT id FROM restaurants WHERE name = 'U Iriny')),
+       ('two launch', 20, (SELECT id FROM restaurants WHERE name = 'U Iriny'));
 
-INSERT INTO votes(id, restaurant_id, created, user_id)
-VALUES (1, 1, 'now()', 1),
-       (2, 1, 'now()', 2),
-       (3, 2, 'now()', 1);
+INSERT INTO votes(restaurant_id, created, user_id)
+VALUES ((SELECT id FROM restaurants WHERE name = 'U Svety'), 'now()', (SELECT id FROM users WHERE email = 'user@mail.com')),
+       ((SELECT id FROM restaurants WHERE name = 'U Svety'), 'now()', (SELECT id FROM users WHERE email = 'admin@mail.com')),
+       ((SELECT id FROM restaurants WHERE name = 'U Natashi'), 'now()', (SELECT id FROM users WHERE email = 'user@mail.com'));

@@ -1,14 +1,13 @@
 package ru.java.votingsystem.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "votes")
@@ -32,5 +31,5 @@ public class Vote extends BaseEntity {
 
     @Column(name = "created", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
-    private Date created = new Date();
+    private LocalDateTime created = LocalDateTime.now();
 }
