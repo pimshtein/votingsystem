@@ -37,7 +37,7 @@ final public class RestaurantController {
     @GetMapping("{id}/")
     public ResponseEntity<Restaurant> get(int id) {
         log.info("get {}", id);
-        return ResponseEntity.of(restaurantRepository.findById(id));
+        return ResponseEntity.of(restaurantRepository.getWithMenus(id));
     }
 
     @DeleteMapping("{id}/")
@@ -58,7 +58,7 @@ final public class RestaurantController {
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
         log.info("create {}", restaurant);
         checkNew(restaurant);
-        Restaurant created = prepareAndSave(restaurant);
+        Restaurant created = restaurantRepository.save(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "{id}/")
                 .buildAndExpand(created.getId()).toUri();
@@ -81,9 +81,5 @@ final public class RestaurantController {
             restaurant.setMenus(menus);
         }
         restaurantRepository.save(restaurant);
-    }
-
-    private Restaurant prepareAndSave(Restaurant restaurant) {
-        return restaurantRepository.save(restaurant);
     }
 }
