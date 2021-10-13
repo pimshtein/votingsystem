@@ -15,6 +15,7 @@ import java.time.temporal.ChronoUnit;
 public class VoteForRestaurant {
     private static final int UPPER_LIMIT_HOUR_FOR_VOTING = 11;
     private static final int UPPER_LIMIT_MINUTE_FOR_VOTING = 0;
+    private static final int UPPER_LIMIT_SECOND_FOR_VOTING = 0;
 
     private final VoteRepository repository;
 
@@ -29,7 +30,7 @@ public class VoteForRestaurant {
 
         LocalDateTime upperVotingTime = now.withHour(UPPER_LIMIT_HOUR_FOR_VOTING)
                 .withMinute(UPPER_LIMIT_MINUTE_FOR_VOTING)
-                .withSecond(0)
+                .withSecond(UPPER_LIMIT_SECOND_FOR_VOTING)
                 .truncatedTo(ChronoUnit.SECONDS);
         if (now.isAfter(upperVotingTime)) {
             throw new CantVotingBecauseTimeIsOverException();

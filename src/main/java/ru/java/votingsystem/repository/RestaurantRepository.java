@@ -12,5 +12,5 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
     // https://stackoverflow.com/a/46013654/548473
     @EntityGraph(attributePaths = {"menus"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r WHERE r.id=?1")
-    Optional<Restaurant> getWithMenus(int id);
+    Optional<Restaurant> findWithMenus(int id);
 }

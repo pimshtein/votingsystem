@@ -13,11 +13,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.java.votingsystem.model.Menu;
 import ru.java.votingsystem.model.Restaurant;
 import ru.java.votingsystem.repository.RestaurantRepository;
+import ru.java.votingsystem.web.restaurant.response.Mapper;
+import ru.java.votingsystem.web.restaurant.response.ViewRestaurantTo;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static ru.java.votingsystem.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.java.votingsystem.util.validation.ValidationUtil.checkNew;
@@ -36,9 +39,15 @@ final public class RestaurantController {
     }
 
     @GetMapping("{id}/")
-    public ResponseEntity<Restaurant> get(int id) {
+    public ResponseEntity<ViewRestaurantTo> get(int id) {
         log.info("get {}", id);
-        return ResponseEntity.of(restaurantRepository.getWithMenus(id));
+
+        Optional<Restaurant> restaurant = restaurantRepository.findWithMenus(id);
+        if (restaurant.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(Mapper.map(restaurant.get()));
     }
 
     @DeleteMapping("{id}/")
