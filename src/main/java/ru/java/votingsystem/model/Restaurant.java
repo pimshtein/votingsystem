@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ToString(callSuper = true)
 public class Restaurant extends NamedEntity {
 
@@ -28,5 +29,9 @@ public class Restaurant extends NamedEntity {
     public void removeMenu(Menu menu) {
         menu.setRestaurant(null);
         this.menus.remove(menu);
+    }
+
+    public Restaurant(String name) {
+        super.name = name;
     }
 }

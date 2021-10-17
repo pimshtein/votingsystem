@@ -3,6 +3,7 @@ package ru.java.votingsystem.web.restaurant;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,9 @@ import ru.java.votingsystem.model.Menu;
 import ru.java.votingsystem.model.Restaurant;
 import ru.java.votingsystem.repository.RestaurantRepository;
 import ru.java.votingsystem.web.restaurant.response.Mapper;
+import ru.java.votingsystem.web.restaurant.response.ViewAllRestaurantTo;
 import ru.java.votingsystem.web.restaurant.response.ViewRestaurantTo;
+import ru.java.votingsystem.web.restaurant.response.create.CreateRestaurantTo;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -47,7 +50,7 @@ final public class RestaurantController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(Mapper.map(restaurant.get()));
+        return ResponseEntity.ok(Mapper.mapViewRestaurantTo(restaurant.get()));
     }
 
     @DeleteMapping("{id}/")
@@ -57,16 +60,22 @@ final public class RestaurantController {
         restaurantRepository.deleteExisted(id);
     }
 
-    @GetMapping(params = { "page", "size" })
+    @GetMapping(params = {"page", "size"})
     @Operation(description = "Get all restaurants")
-    public Page<Restaurant> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public Page<ViewAllRestaurantTo> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
         log.info("getAll");
-         return restaurantRepository.findAll(PageRequest.of(page, size, Sort.by("name")));
+        Page<Restaurant> restaurantPage = restaurantRepository.findAll(PageRequest.of(page, size, Sort.by("name")));
+        return new PageImpl<>(
+            Mapper.mapViewAllRestaurantTos(restaurantPage.getContent()),
+            restaurantPage.getPageable(),
+            restaurantPage.getTotalElements()
+        );
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
-        log.info("create {}", restaurant);
+    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody CreateRestaurantTo restaurantTo) {
+        log.info("create {}", restaurantTo);
+        Restaurant restaurant = Mapper.createRestaurantFromTo(restaurantTo);
         checkNew(restaurant);
         Restaurant created = restaurantRepository.save(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()

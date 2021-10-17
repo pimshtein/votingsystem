@@ -9,10 +9,14 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 @Entity
-@Table(name = "menus")
+@Table(name = "menus",
+    uniqueConstraints=
+        @UniqueConstraint(columnNames={"restaurant_id", "dish_name"})
+)
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ToString(callSuper = true)
 public class Menu extends BaseEntity {
 
@@ -32,4 +36,9 @@ public class Menu extends BaseEntity {
     @JsonBackReference
     @NotNull
     private Restaurant restaurant;
+
+    public Menu(String dishName, Integer price) {
+        this.dishName = dishName;
+        this.price = price;
+    }
 }
