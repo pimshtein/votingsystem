@@ -3,26 +3,17 @@ package ru.java.votingsystem.web.vote;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.java.votingsystem.model.AuthUser;
-import ru.java.votingsystem.model.CountVoteByRestaurantPerDay;
-import ru.java.votingsystem.model.Menu;
-import ru.java.votingsystem.model.Vote;
-import ru.java.votingsystem.repository.MenuRepository;
 import ru.java.votingsystem.repository.VoteRepository;
 import ru.java.votingsystem.usecase.VoteForRestaurant;
+import ru.java.votingsystem.web.vote.request.CreateVoteTo;
+import ru.java.votingsystem.web.vote.response.CountVoteByRestaurantPerDay;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
-
-import static ru.java.votingsystem.util.validation.ValidationUtil.assureIdConsistent;
-import static ru.java.votingsystem.util.validation.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,14 +34,12 @@ public class VoteController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vote> createWithLocation(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody Vote vote) {
+    public void create(
+            @AuthenticationPrincipal AuthUser authUser,
+            @Valid @RequestBody CreateVoteTo voteTo
+    ) {
         int userId = authUser.id();
-        log.info("create {} for user {}", vote, userId);
-        checkNew(vote);
-        Vote created = useCase.execute(vote, userId);
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "{id}/")
-                .buildAndExpand(created.getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(created);
+        log.info("create {} for user {}", voteTo, userId);
+        useCase.execute(voteTo, userId);
     }
 }

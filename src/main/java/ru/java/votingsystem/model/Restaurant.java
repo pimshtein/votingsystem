@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ToString(callSuper = true)
 public class Restaurant extends NamedEntity {
 
@@ -20,6 +21,10 @@ public class Restaurant extends NamedEntity {
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
     private List<Menu> menus;
+
+    public Restaurant(String name) {
+        super.name = name;
+    }
 
     public void addMenu(Menu menu) {
         this.menus.add(menu);

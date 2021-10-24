@@ -6,7 +6,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,13 +24,15 @@ public class Vote extends BaseEntity {
     @JsonBackReference("user-vote") // to avoid duplicate references into Restaurant->User
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
-    private Restaurant restaurant;
+    @NotNull
+    @Positive
+    private int restaurantId;
 
     @Column(name = "created", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     private LocalDateTime created = LocalDateTime.now();
+
+    public Vote(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
 }

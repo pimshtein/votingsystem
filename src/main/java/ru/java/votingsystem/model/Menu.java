@@ -6,13 +6,20 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "menus")
+@Table(name = "menus",
+        uniqueConstraints =
+        @UniqueConstraint(columnNames = {"restaurant_id", "dish_name"})
+)
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ToString(callSuper = true)
 public class Menu extends BaseEntity {
 
@@ -32,4 +39,9 @@ public class Menu extends BaseEntity {
     @JsonBackReference
     @NotNull
     private Restaurant restaurant;
+
+    public Menu(String dishName, Integer price) {
+        this.dishName = dishName;
+        this.price = price;
+    }
 }

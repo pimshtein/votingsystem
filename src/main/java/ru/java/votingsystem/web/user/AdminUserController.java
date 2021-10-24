@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.java.votingsystem.model.User;
+import ru.java.votingsystem.web.user.request.CreateUserTo;
+import ru.java.votingsystem.web.user.request.RequestMapper;
+import ru.java.votingsystem.web.user.request.UpdateUserTo;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -52,8 +55,9 @@ public class AdminUserController extends AbstractUserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
-    public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
-        log.info("create {}", user);
+    public ResponseEntity<User> createWithLocation(@Valid @RequestBody CreateUserTo userTo) {
+        log.info("create {}", userTo);
+        User user = RequestMapper.createUserFromTo(userTo);
         checkNew(user);
         User created = prepareAndSave(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -65,8 +69,9 @@ public class AdminUserController extends AbstractUserController {
     @PutMapping(value = "{id}/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
-    public void update(@Valid @RequestBody User user, @PathVariable int id) {
-        log.info("update {} with id={}", user, id);
+    public void update(@Valid @RequestBody UpdateUserTo userTo, @PathVariable int id) {
+        log.info("update {} with id={}", userTo, id);
+        User user = RequestMapper.createUserFromUpdateTo(userTo);
         assureIdConsistent(user, id);
         prepareAndSave(user);
     }

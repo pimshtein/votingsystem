@@ -2,6 +2,9 @@ package ru.java.votingsystem.web.restaurant;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,13 +13,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.java.votingsystem.model.Menu;
 import ru.java.votingsystem.model.Restaurant;
-import ru.java.votingsystem.repository.MenuRepository;
 import ru.java.votingsystem.repository.RestaurantRepository;
+import ru.java.votingsystem.web.restaurant.request.RequestMapper;
+import ru.java.votingsystem.web.restaurant.request.create.CreateRestaurantTo;
+import ru.java.votingsystem.web.restaurant.request.update.UpdateRestaurantTo;
+import ru.java.votingsystem.web.restaurant.response.ResponseMapper;
+import ru.java.votingsystem.web.restaurant.response.ViewAllRestaurantTo;
+import ru.java.votingsystem.web.restaurant.response.ViewRestaurantTo;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static ru.java.votingsystem.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.java.votingsystem.util.validation.ValidationUtil.checkNew;
@@ -35,9 +44,15 @@ final public class RestaurantController {
     }
 
     @GetMapping("{id}/")
-    public ResponseEntity<Restaurant> get(int id) {
+    public ResponseEntity<ViewRestaurantTo> get(int id) {
         log.info("get {}", id);
-        return ResponseEntity.of(restaurantRepository.getWithMenus(id));
+
+        Optional<Restaurant> restaurant = restaurantRepository.findWithMenus(id);
+        if (restaurant.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(ResponseMapper.mapViewRestaurantTo(restaurant.get()));
     }
 
     @DeleteMapping("{id}/")
@@ -47,16 +62,22 @@ final public class RestaurantController {
         restaurantRepository.deleteExisted(id);
     }
 
-    @GetMapping
+    @GetMapping(params = {"page", "size"})
     @Operation(description = "Get all restaurants")
-    public List<Restaurant> getAll() {
+    public Page<ViewAllRestaurantTo> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
         log.info("getAll");
-         return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        Page<Restaurant> restaurantPage = restaurantRepository.findAll(PageRequest.of(page, size, Sort.by("name")));
+        return new PageImpl<>(
+                ResponseMapper.mapViewAllRestaurantTos(restaurantPage.getContent()),
+                restaurantPage.getPageable(),
+                restaurantPage.getTotalElements()
+        );
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
-        log.info("create {}", restaurant);
+    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody CreateRestaurantTo restaurantTo) {
+        log.info("create {}", restaurantTo);
+        Restaurant restaurant = RequestMapper.createRestaurantFromTo(restaurantTo);
         checkNew(restaurant);
         Restaurant created = restaurantRepository.save(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -67,10 +88,12 @@ final public class RestaurantController {
 
     @PutMapping(value = "{id}/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
-        log.info("update {} with id={}", restaurant, id);
-        assureIdConsistent(restaurant, id);
-        prepareAndUpdate(restaurant);
+    public void update(@Valid @RequestBody UpdateRestaurantTo restaurantTo, @PathVariable int id) {
+        log.info("update {} with id={}", restaurantTo, id);
+        Restaurant restaurant = RequestMapper.createRestaurantFromUpdateTo(restaurantTo);
+        Restaurant updated = restaurantRepository.save(restaurant);
+        assureIdConsistent(updated, id);
+        prepareAndUpdate(updated);
     }
 
     private void prepareAndUpdate(Restaurant restaurant) {
