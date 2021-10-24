@@ -14,10 +14,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.java.votingsystem.model.Menu;
 import ru.java.votingsystem.model.Restaurant;
 import ru.java.votingsystem.repository.RestaurantRepository;
-import ru.java.votingsystem.web.restaurant.response.Mapper;
+import ru.java.votingsystem.web.restaurant.request.RequestMapper;
+import ru.java.votingsystem.web.restaurant.request.create.CreateRestaurantTo;
+import ru.java.votingsystem.web.restaurant.request.update.UpdateRestaurantTo;
+import ru.java.votingsystem.web.restaurant.response.ResponseMapper;
 import ru.java.votingsystem.web.restaurant.response.ViewAllRestaurantTo;
 import ru.java.votingsystem.web.restaurant.response.ViewRestaurantTo;
-import ru.java.votingsystem.web.restaurant.response.create.CreateRestaurantTo;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -50,7 +52,7 @@ final public class RestaurantController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(Mapper.mapViewRestaurantTo(restaurant.get()));
+        return ResponseEntity.ok(ResponseMapper.mapViewRestaurantTo(restaurant.get()));
     }
 
     @DeleteMapping("{id}/")
@@ -66,16 +68,16 @@ final public class RestaurantController {
         log.info("getAll");
         Page<Restaurant> restaurantPage = restaurantRepository.findAll(PageRequest.of(page, size, Sort.by("name")));
         return new PageImpl<>(
-            Mapper.mapViewAllRestaurantTos(restaurantPage.getContent()),
-            restaurantPage.getPageable(),
-            restaurantPage.getTotalElements()
+                ResponseMapper.mapViewAllRestaurantTos(restaurantPage.getContent()),
+                restaurantPage.getPageable(),
+                restaurantPage.getTotalElements()
         );
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody CreateRestaurantTo restaurantTo) {
         log.info("create {}", restaurantTo);
-        Restaurant restaurant = Mapper.createRestaurantFromTo(restaurantTo);
+        Restaurant restaurant = RequestMapper.createRestaurantFromTo(restaurantTo);
         checkNew(restaurant);
         Restaurant created = restaurantRepository.save(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -86,10 +88,12 @@ final public class RestaurantController {
 
     @PutMapping(value = "{id}/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
-        log.info("update {} with id={}", restaurant, id);
-        assureIdConsistent(restaurant, id);
-        prepareAndUpdate(restaurant);
+    public void update(@Valid @RequestBody UpdateRestaurantTo restaurantTo, @PathVariable int id) {
+        log.info("update {} with id={}", restaurantTo, id);
+        Restaurant restaurant = RequestMapper.createRestaurantFromUpdateTo(restaurantTo);
+        Restaurant updated = restaurantRepository.save(restaurant);
+        assureIdConsistent(updated, id);
+        prepareAndUpdate(updated);
     }
 
     private void prepareAndUpdate(Restaurant restaurant) {

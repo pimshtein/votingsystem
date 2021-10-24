@@ -3,8 +3,8 @@ package ru.java.votingsystem.repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import ru.java.votingsystem.model.CountVoteByRestaurantPerDay;
 import ru.java.votingsystem.model.Vote;
+import ru.java.votingsystem.web.vote.response.CountVoteByRestaurantPerDay;
 
 import java.util.List;
 

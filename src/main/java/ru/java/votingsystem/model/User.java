@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true, exclude = {"password"})
-public class User  extends NamedEntity {
+public class User extends NamedEntity {
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
@@ -60,6 +60,13 @@ public class User  extends NamedEntity {
         this.password = password;
         this.enabled = enabled;
         this.registered = registered;
+        setRoles(roles);
+    }
+
+    public User(String name, String email, String password, Collection<Role> roles) {
+        super.name = name;
+        this.email = email;
+        this.password = password;
         setRoles(roles);
     }
 

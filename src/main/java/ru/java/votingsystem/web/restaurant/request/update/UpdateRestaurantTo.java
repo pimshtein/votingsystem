@@ -1,4 +1,4 @@
-package ru.java.votingsystem.web.restaurant.response.create;
+package ru.java.votingsystem.web.restaurant.request.update;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CreateRestaurantTo {
+public class UpdateRestaurantTo {
     private String name;
 
-    private List<CreateMenuTo> menu;
+    private List<UpdateMenuTo> menu;
 }

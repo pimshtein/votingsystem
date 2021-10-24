@@ -6,12 +6,15 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "menus",
-    uniqueConstraints=
-        @UniqueConstraint(columnNames={"restaurant_id", "dish_name"})
+        uniqueConstraints =
+        @UniqueConstraint(columnNames = {"restaurant_id", "dish_name"})
 )
 @Getter
 @Setter
