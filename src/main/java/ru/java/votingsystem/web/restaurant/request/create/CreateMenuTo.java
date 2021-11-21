@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
@@ -18,6 +15,6 @@ public class CreateMenuTo {
     private String dishName;
 
     @NotNull
-    @Min(0)
+    @Positive
     private Integer price;
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -18,5 +19,6 @@ public class CreateRestaurantTo {
     private String name;
 
     @NotEmpty
+    @Valid
     private List<CreateMenuTo> menu;
 }
