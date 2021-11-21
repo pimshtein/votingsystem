@@ -44,7 +44,7 @@ final public class RestaurantController {
     }
 
     @GetMapping("{id}/")
-    public ResponseEntity<ViewRestaurantTo> get(int id) {
+    public ResponseEntity<ViewRestaurantTo> get(@PathVariable int id) {
         log.info("get {}", id);
 
         Optional<Restaurant> restaurant = restaurantRepository.findWithMenus(id);
