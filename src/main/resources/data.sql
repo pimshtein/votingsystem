@@ -8,9 +8,8 @@ VALUES ('USER', 1),
        ('USER', 2);
 
 INSERT INTO restaurants (name)
-VALUES ('U Svety'),
-       ('U Natashi'),
-       ('U Iriny');
+VALUES ('First'),
+       ('Second');
 
 INSERT INTO menus (dish_name, price, restaurant_id)
 VALUES ('breakfast', 10, 1),
@@ -18,9 +17,7 @@ VALUES ('breakfast', 10, 1),
        ('dinner', 30, 1),
        ('one breakfast', 10, 2),
        ('one launch', 20, 2),
-       ('one dinner', 30, 2),
-       ('two breakfast', 10, 3),
-       ('two launch', 20, 3);
+       ('one dinner', 30, 2);
 
 INSERT INTO votes(restaurant_id, created, user_id)
 VALUES (1, 'now()', 1),

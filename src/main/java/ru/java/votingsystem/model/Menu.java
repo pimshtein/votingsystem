@@ -1,6 +1,7 @@
 package ru.java.votingsystem.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -20,7 +21,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"restaurant"})
 public class Menu extends BaseEntity {
 
     @Column(name = "dish_name", nullable = false, unique = true)
@@ -36,11 +37,17 @@ public class Menu extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
+    @JsonIgnore
     @NotNull
     private Restaurant restaurant;
 
     public Menu(String dishName, Integer price) {
+        this.dishName = dishName;
+        this.price = price;
+    }
+
+    public Menu(Integer id, String dishName, Integer price) {
+        super.id = id;
         this.dishName = dishName;
         this.price = price;
     }
