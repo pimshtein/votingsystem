@@ -1,5 +1,6 @@
 package ru.java.votingsystem.web;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,10 +12,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import ru.java.votingsystem.repository.RestaurantRepository;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.java.votingsystem.web.TestData.*;
-import static ru.java.votingsystem.web.restaurant.RestaurantController.REST_URL;
+import static ru.java.votingsystem.web.restaurant.RestaurantController.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,7 +34,7 @@ public class RestaurantControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(String.format("%s/%d/", REST_URL, FIRST_RESTAURANT_ID)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MATCHER.contentJson(restaurant));
+                .andExpect(MATCHER.contentJson(firstRestaurant));
     }
 
     @Test
@@ -40,6 +42,6 @@ public class RestaurantControllerTest {
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(String.format("%s/%d/", REST_URL, SECOND_RESTAURANT_ID)))
                 .andExpect(status().isNoContent());
-        MATCHER.assertMatch(restaurantRepository.findAll(), restaurant);
+        MATCHER.assertMatch(restaurantRepository.findAll(), firstRestaurant);
     }
 }
