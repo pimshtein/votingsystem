@@ -35,7 +35,7 @@ import static ru.java.votingsystem.util.validation.ValidationUtil.checkNew;
 @Slf4j
 final public class RestaurantController {
 
-    static final String REST_URL = "/api/v1/restaurants/";
+    static public final String REST_URL = "/api/v1/restaurants/";
 
     private final RestaurantRepository restaurantRepository;
 

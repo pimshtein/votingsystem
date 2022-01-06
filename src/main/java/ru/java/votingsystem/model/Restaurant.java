@@ -18,12 +18,17 @@ import java.util.List;
 public class Restaurant extends NamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
     private List<Menu> menus;
 
     public Restaurant(String name) {
         super.name = name;
+    }
+
+    public Restaurant(Integer id, String name, List<Menu> menus) {
+        super.id = id;
+        super.name = name;
+        this.menus = menus;
     }
 
     public void addMenu(Menu menu) {
