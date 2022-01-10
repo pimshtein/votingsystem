@@ -20,3 +20,6 @@ As a result, provide a link to github repository. It should contain the code, RE
 
 P.S.: Make sure everything works with latest version that is on github :)
 P.P.S.: Assume that your API will be used by a frontend developer to build frontend on top of that.
+
+### Realisation:  
+### [Demo](https://pimshtein-votingsystem.herokuapp.com/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config) (heroku)
