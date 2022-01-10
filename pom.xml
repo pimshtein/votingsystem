@@ -15,7 +15,7 @@
     <name>votingsystem</name>
     <description>Voting system for menu</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <springdoc.version>1.5.10</springdoc.version>
