@@ -1,1 +1,1 @@
-web: -jar target/dependency/votingsystem-1.0.jar
+web: -jar target/dependency/votingsystem-1.0.jar --port $PORT
