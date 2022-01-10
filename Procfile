@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/dependency/votingsystem-1.0.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/votingsystem-1.0.jar
