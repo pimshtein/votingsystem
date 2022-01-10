@@ -77,7 +77,7 @@ final public class RestaurantController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody CreateRestaurantTo restaurantTo) {
+    public ResponseEntity<Restaurant> create(@Valid @RequestBody CreateRestaurantTo restaurantTo) {
         log.info("create {}", restaurantTo);
         Restaurant restaurant = RequestMapper.createRestaurantFromTo(restaurantTo);
         checkNew(restaurant);
