@@ -36,6 +36,8 @@ import static ru.java.votingsystem.util.validation.ValidationUtil.checkNew;
 final public class RestaurantController {
 
     static public final String REST_URL = "/api/v1/restaurants/";
+    static public final Integer PAGE = 0;
+    static public final Integer SIZE = 10;
 
     private final RestaurantRepository restaurantRepository;
 
@@ -75,7 +77,7 @@ final public class RestaurantController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody CreateRestaurantTo restaurantTo) {
+    public ResponseEntity<Restaurant> create(@Valid @RequestBody CreateRestaurantTo restaurantTo) {
         log.info("create {}", restaurantTo);
         Restaurant restaurant = RequestMapper.createRestaurantFromTo(restaurantTo);
         checkNew(restaurant);

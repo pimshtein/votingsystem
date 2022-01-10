@@ -14,10 +14,17 @@ public class TestData {
     public static final Integer FIRST_RESTAURANT_ID = 1;
     public static final Integer SECOND_RESTAURANT_ID = 2;
 
-    public static List<Menu> menus = List.of(
+    public static List<Menu> firstRestaurantMenus = List.of(
             new Menu(1, "breakfast", 10),
             new Menu(2, "launch", 20),
             new Menu(3, "dinner", 30)
     );
-    public static Restaurant restaurant = new Restaurant(1, "First", menus);
+
+    public static List<Menu> secondRestaurantMenus = List.of(
+            new Menu(4, "one breakfast", 10),
+            new Menu(5, "one launch", 20),
+            new Menu(6, "one dinner", 30)
+    );
+    public static Restaurant firstRestaurant = new Restaurant(1, "First", firstRestaurantMenus);
+    public static Restaurant secondRestaurant = new Restaurant(2, "Second", secondRestaurantMenus);
 }
