@@ -1,6 +1,5 @@
 package ru.java.votingsystem.web;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,16 +14,12 @@ import ru.java.votingsystem.model.Restaurant;
 import ru.java.votingsystem.repository.RestaurantRepository;
 import ru.java.votingsystem.util.JsonUtil;
 import ru.java.votingsystem.web.restaurant.request.RequestMapper;
-import ru.java.votingsystem.web.restaurant.request.create.CreateMenuTo;
-import ru.java.votingsystem.web.restaurant.request.create.CreateRestaurantTo;
-
-import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.java.votingsystem.web.TestData.*;
-import static ru.java.votingsystem.web.restaurant.RestaurantController.*;
+import static ru.java.votingsystem.web.restaurant.RestaurantController.REST_URL;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -56,12 +51,11 @@ public class RestaurantControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_EMAIL)
     void create() throws Exception {
-        CreateMenuTo newMenuTo = new CreateMenuTo("Test", 10);
-        CreateRestaurantTo newRestaurantTo = new CreateRestaurantTo("Test", List.of(newMenuTo));
-        Restaurant newRestaurant = RequestMapper.createRestaurantFromTo(newRestaurantTo);
+
+        Restaurant newRestaurant = RequestMapper.createRestaurantFromTo(newCreateRestaurantTo);
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(newRestaurantTo)))
+                .content(JsonUtil.writeValue(newCreateRestaurantTo)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
@@ -70,5 +64,22 @@ public class RestaurantControllerTest {
         newRestaurant.setId(newId);
         MATCHER.assertMatch(created, newRestaurant);
         MATCHER.assertMatch(restaurantRepository.getById(newId), newRestaurant);
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_EMAIL)
+    void update() throws Exception {
+        Restaurant newRestaurant = RequestMapper.createRestaurantFromUpdateTo(newUpdateRestaurantTo);
+
+        mockMvc.perform(MockMvcRequestBuilders.put(String.format("%s/%d/", REST_URL, FIRST_RESTAURANT_ID))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newUpdateRestaurantTo)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        newRestaurant.setId(FIRST_RESTAURANT_ID);
+        newRestaurant.getMenus().forEach(menu -> menu.setId(NEW_MENU_ID));
+
+        MATCHER.assertMatch(restaurantRepository.getById(FIRST_RESTAURANT_ID), newRestaurant);
     }
 }

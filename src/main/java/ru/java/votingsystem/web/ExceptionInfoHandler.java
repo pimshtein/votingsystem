@@ -34,7 +34,12 @@ public class ExceptionInfoHandler {
         return getErrorInfo(req, e, VALIDATION_ERROR, details);
     }
 
-    @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
+    @ExceptionHandler({
+            IllegalRequestDataException.class,
+            MethodArgumentTypeMismatchException.class,
+            HttpMessageNotReadableException.class,
+            IllegalArgumentException.class
+    })
     public ResponseEntity<ErrorInfo> illegalRequestDataError(HttpServletRequest req, Exception e) {
         return getErrorInfo(req, e, VALIDATION_ERROR, new HashMap<>());
     }

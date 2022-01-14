@@ -27,8 +27,8 @@ public class RequestMapper {
     public static Restaurant createRestaurantFromUpdateTo(UpdateRestaurantTo restaurantTo) {
         Restaurant restaurant = new Restaurant(restaurantTo.getName());
         List<Menu> menus = restaurantTo.getMenu().stream()
-                .map(createMenuTo -> {
-                    Menu menu = new Menu(createMenuTo.getDishName(), createMenuTo.getPrice());
+                .map(updateMenuTo -> {
+                    Menu menu = new Menu(updateMenuTo.getDishName(), updateMenuTo.getPrice());
                     menu.setRestaurant(restaurant);
                     return menu;
                 })

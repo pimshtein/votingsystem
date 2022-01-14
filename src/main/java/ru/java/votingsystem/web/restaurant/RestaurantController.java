@@ -36,8 +36,6 @@ import static ru.java.votingsystem.util.validation.ValidationUtil.checkNew;
 final public class RestaurantController {
 
     static public final String REST_URL = "/api/v1/restaurants/";
-    static public final Integer PAGE = 0;
-    static public final Integer SIZE = 10;
 
     private final RestaurantRepository restaurantRepository;
 
@@ -93,18 +91,16 @@ final public class RestaurantController {
     public void update(@Valid @RequestBody UpdateRestaurantTo restaurantTo, @PathVariable int id) {
         log.info("update {} with id={}", restaurantTo, id);
         Restaurant restaurant = RequestMapper.createRestaurantFromUpdateTo(restaurantTo);
-        Restaurant updated = restaurantRepository.save(restaurant);
-        assureIdConsistent(updated, id);
-        prepareAndUpdate(updated);
+        assureIdConsistent(restaurant, id);
+        prepareAndUpdate(restaurant);
     }
 
     private void prepareAndUpdate(Restaurant restaurant) {
         if (!restaurant.getMenus().isEmpty()) {
             List<Menu> menus = new ArrayList<>(restaurant.getMenus());
-            restaurant.getMenus().clear();
-            restaurantRepository.save(restaurant);
             restaurant.setMenus(menus);
         }
+
         restaurantRepository.save(restaurant);
     }
 }
