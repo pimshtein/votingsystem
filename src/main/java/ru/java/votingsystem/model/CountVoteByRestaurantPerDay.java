@@ -1,4 +1,4 @@
-package ru.java.votingsystem.web.vote.response;
+package ru.java.votingsystem.model;
 
 import java.time.LocalDate;
 

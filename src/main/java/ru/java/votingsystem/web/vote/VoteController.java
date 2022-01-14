@@ -10,7 +10,9 @@ import ru.java.votingsystem.model.AuthUser;
 import ru.java.votingsystem.repository.VoteRepository;
 import ru.java.votingsystem.usecase.VoteForRestaurant;
 import ru.java.votingsystem.web.vote.request.CreateVoteTo;
-import ru.java.votingsystem.web.vote.response.CountVoteByRestaurantPerDay;
+import ru.java.votingsystem.model.CountVoteByRestaurantPerDay;
+import ru.java.votingsystem.web.vote.response.AllVotesByRestaurantTo;
+import ru.java.votingsystem.web.vote.response.ResponseMapper;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,9 +30,10 @@ public class VoteController {
 
     @GetMapping("by-restaurant/")
     @Operation(description = "Get all votes sorted by votes")
-    public List<CountVoteByRestaurantPerDay> getAll() {
+    public List<AllVotesByRestaurantTo> getAll() {
         log.info("getAll");
-        return repository.countVotesByRestaurantPerDayNative();
+
+        return ResponseMapper.mapCountVotes(repository.countVotesByRestaurantPerDayNative());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
