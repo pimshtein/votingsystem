@@ -36,7 +36,7 @@ public class TestData {
     public static UpdateRestaurantTo newUpdateRestaurantTo = new UpdateRestaurantTo("Test", List.of(newUpdateMenuTo));
 
     public static List<AllVotesByRestaurantTo> allVotes = List.of(
-            new AllVotesByRestaurantTo(FIRST_RESTAURANT_ID, LocalDate.now(), 2),
+            new AllVotesByRestaurantTo(FIRST_RESTAURANT_ID, LocalDate.now(), 1),
             new AllVotesByRestaurantTo(SECOND_RESTAURANT_ID, LocalDate.now(), 1)
     );
 }

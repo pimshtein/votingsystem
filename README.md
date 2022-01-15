@@ -23,3 +23,12 @@ P.P.S.: Assume that your API will be used by a frontend developer to build front
 
 ### Realization:  
 ### [Demo](https://pimshtein-votingsystem.herokuapp.com/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config) (heroku)
+
+### Usecases:  
+1. Admin can add the restaurant with the menu (`POST /api/v1/restaurants/`)  
+2. Admin can edit the restaurant with the menu (`PUT /api/v1/restaurants/`)  
+3. Admin can delete the restaurant with the menu (`DELETE /api/v1/restaurants/`)  
+4. User can vote at the restaurant (one vote of the day `POST /api/v1/votes/`) User can vote a lot of the time, if the time is before 11.00 on the day.  
+5. User and Admin can view votes to the restaurants (`GET /api/v1/votes/by-restaurant/`)  
+6. User and Admin can view all restaurants with menus (`GET /api/v1/restaurants/`) with pagination  
+7. Admin can edit users (`CRUD /api/v1/admin/users/`)

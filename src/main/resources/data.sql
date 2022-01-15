@@ -20,6 +20,5 @@ VALUES ('breakfast', 10, 1),
        ('one dinner', 30, 2);
 
 INSERT INTO votes(restaurant_id, created, user_id)
-VALUES (1, 'now()', 1),
-       (1, 'now()', 2),
+VALUES (1, 'now()', 2),
        (2, 'now()', 1);
