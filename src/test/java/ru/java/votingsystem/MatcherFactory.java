@@ -29,10 +29,10 @@ public class MatcherFactory {
                 (a, e) -> assertThat(a).isEqualTo(e));
     }
 
-    public static <T> Matcher<T> usingIgnoringFieldsComparator(Class<T> clazz, String... fieldsToIgnore) {
+    public static <T> Matcher<T> usingIterableElementComparisonStrategy(Class<T> clazz) {
         return usingAssertions(clazz,
-                (a, e) -> assertThat(a).usingRecursiveComparison().ignoringFields(fieldsToIgnore).isEqualTo(e),
-                (a, e) -> assertThat(a).usingElementComparatorIgnoringFields(fieldsToIgnore).isEqualTo(e));
+                (a, e) -> assertThat(a).usingRecursiveComparison().isEqualTo(e),
+                (a, e) -> assertThat(a).usingRecursiveComparison().isEqualTo(e));
     }
 
     public static class Matcher<T> {
@@ -61,11 +61,6 @@ public class MatcherFactory {
 
         public ResultMatcher contentJson(T expected) {
             return result -> assertMatch(JsonUtil.readValue(getContent(result), clazz), expected);
-        }
-
-        @SafeVarargs
-        public final ResultMatcher contentJson(T... expected) {
-            return contentJson(List.of(expected));
         }
 
         public ResultMatcher contentJson(Iterable<T> expected) {

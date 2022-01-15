@@ -37,7 +37,7 @@ public class RestaurantControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(String.format("%s/%d/", REST_URL, FIRST_RESTAURANT_ID)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MATCHER.contentJson(firstRestaurant));
+                .andExpect(RESTAURANT_MATCHER.contentJson(firstRestaurant));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class RestaurantControllerTest {
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(String.format("%s/%d/", REST_URL, SECOND_RESTAURANT_ID)))
                 .andExpect(status().isNoContent());
-        MATCHER.assertMatch(restaurantRepository.findAll(), firstRestaurant);
+        RESTAURANT_MATCHER.assertMatch(restaurantRepository.findAll(), firstRestaurant);
     }
 
     @Test
@@ -59,11 +59,11 @@ public class RestaurantControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        Restaurant created = MATCHER.readFromJson(action);
+        Restaurant created = RESTAURANT_MATCHER.readFromJson(action);
         int newId = created.id();
         newRestaurant.setId(newId);
-        MATCHER.assertMatch(created, newRestaurant);
-        MATCHER.assertMatch(restaurantRepository.getById(newId), newRestaurant);
+        RESTAURANT_MATCHER.assertMatch(created, newRestaurant);
+        RESTAURANT_MATCHER.assertMatch(restaurantRepository.getById(newId), newRestaurant);
     }
 
     @Test
@@ -80,6 +80,6 @@ public class RestaurantControllerTest {
         newRestaurant.setId(FIRST_RESTAURANT_ID);
         newRestaurant.getMenus().forEach(menu -> menu.setId(NEW_MENU_ID));
 
-        MATCHER.assertMatch(restaurantRepository.getById(FIRST_RESTAURANT_ID), newRestaurant);
+        RESTAURANT_MATCHER.assertMatch(restaurantRepository.getById(FIRST_RESTAURANT_ID), newRestaurant);
     }
 }

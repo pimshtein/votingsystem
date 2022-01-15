@@ -10,7 +10,6 @@ import ru.java.votingsystem.model.AuthUser;
 import ru.java.votingsystem.repository.VoteRepository;
 import ru.java.votingsystem.usecase.VoteForRestaurant;
 import ru.java.votingsystem.web.vote.request.CreateVoteTo;
-import ru.java.votingsystem.model.CountVoteByRestaurantPerDay;
 import ru.java.votingsystem.web.vote.response.AllVotesByRestaurantTo;
 import ru.java.votingsystem.web.vote.response.ResponseMapper;
 
@@ -23,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 public class VoteController {
 
-    static final String REST_URL = "/api/v1/votes/";
+    static public final String REST_URL = "/api/v1/votes/";
 
     private final VoteRepository repository;
     private final VoteForRestaurant useCase;
