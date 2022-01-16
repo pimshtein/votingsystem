@@ -24,6 +24,12 @@ P.P.S.: Assume that your API will be used by a frontend developer to build front
 ### Realization:  
 ### [Demo](https://pimshtein-votingsystem.herokuapp.com/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config) (heroku)
 
+Authorize:  
+* admin:  
+admin@mail.com admin
+* user:  
+user@mail.com password  
+
 ### Usecases:  
 1. Admin can add the restaurant with the menu (`POST /api/v1/restaurants/`)  
 2. Admin can edit the restaurant with the menu (`PUT /api/v1/restaurants/`)  
