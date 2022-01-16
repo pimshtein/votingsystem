@@ -32,7 +32,8 @@ public class Vote extends BaseEntity {
     @NotNull
     private LocalDateTime created = LocalDateTime.now();
 
-    public Vote(int restaurantId) {
+    public Vote(User user, int restaurantId) {
+        this.user = user;
         this.restaurantId = restaurantId;
     }
 }

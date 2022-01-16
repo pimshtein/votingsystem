@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.java.votingsystem.error.CantVotingBecauseTimeIsOverException;
+import ru.java.votingsystem.model.User;
 import ru.java.votingsystem.model.Vote;
 import ru.java.votingsystem.repository.VoteRepository;
 import ru.java.votingsystem.web.vote.request.CreateVoteTo;
@@ -21,10 +22,10 @@ public class VoteForRestaurant {
     private final VoteRepository repository;
 
     @Transactional
-    public void execute(CreateVoteTo voteTo, int userId) {
-        Vote voteByUserPerDay = repository.getByUserAndCreated(userId);
-        if (voteByUserPerDay.getId() == null) {
-            Vote vote = new Vote(voteTo.getRestaurantId());
+    public void execute(CreateVoteTo voteTo, User user) {
+        Vote voteByUserPerDay = repository.getByUserAndCreated(user.id());
+        if (voteByUserPerDay == null) {
+            Vote vote = new Vote(user, voteTo.getRestaurantId());
             repository.save(vote);
             return;
         }

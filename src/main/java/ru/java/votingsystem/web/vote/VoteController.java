@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.java.votingsystem.model.AuthUser;
+import ru.java.votingsystem.model.User;
 import ru.java.votingsystem.repository.VoteRepository;
 import ru.java.votingsystem.usecase.VoteForRestaurant;
 import ru.java.votingsystem.web.vote.request.CreateVoteTo;
@@ -40,8 +41,8 @@ public class VoteController {
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody CreateVoteTo voteTo
     ) {
-        int userId = authUser.id();
-        log.info("create {} for user {}", voteTo, userId);
-        useCase.execute(voteTo, userId);
+        User user = authUser.user();
+        log.info("create {} for user {}", voteTo, user.id());
+        useCase.execute(voteTo, user);
     }
 }
